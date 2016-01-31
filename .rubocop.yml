@@ -1,0 +1,48 @@
+AllCops:
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  Exclude:
+    - bin/**/*
+    - Capfile
+    - spec/**/*
+    - db/schema.rb
+    - Gemfile
+    - Guardfile
+    - Rakefile
+    - config.ru
+    - db/**/*
+    - config/**/**
+
+Rails:
+  Enabled: true
+
+Metrics/LineLength:
+  Exclude:
+    - "config/**/*"
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Documentation:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: true
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/HashSyntax:
+  EnforcedStyle: ruby19_no_mixed_keys
+
+Style/SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/TrivialAccessors:
+  AllowPredicates: true
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes

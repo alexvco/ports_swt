@@ -1,0 +1,44 @@
+Minimum Marketing Feature
+- Create a stacked word tree application for sale!
+
+User Stories:
+- As a user, I would like to upload a file containing a list of words and view the stacked word trees
+
+
+Engineering Tasks:
+- setup git
+- setup a CI server
+- create a README
+
+TODO
+
+
+ISSUES:
+
+
+Future ideas:
+
+
+RESEARCH:
+
+
+----------------------------------------------------------------------------------------------------------------
+
+GRAVEYARD:
+* create a rails application
+
+
+Notes:
+
+StackedWordTrees:
+	1.	A StackedWordTree is a sequence of words, starting with a 3-letter word, that are incrementally longer than each other via the addition of a letter
+	2.	Example of a StackedWordTree:
+	1.	bus
+	2.	stub
+	3.	burst
+	4.	bursts
+	3.	All words in a StackedWordTree must appear in the input wordlist
+
+
+
+
