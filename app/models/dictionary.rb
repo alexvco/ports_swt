@@ -18,31 +18,56 @@ class Dictionary
   def find_possible_stacks
     candidates = @hash_with_length_as_key[3]
 
-    stacked_trees = { }
+    stacked_trees = {}
 
-    candidates.each do |candidate|
-      stacked_trees[candidate] ||= {}
+    @max = @hash_with_length_as_key.keys.max
+
+    ["ire"].each do |candidate|
+      # stacked_trees[candidate] ||= {}
+      stacked_trees[candidate] ||= []
 
       puts "candidate: #{candidate.inspect}"
       puts ""
 
-      @hash_with_length_as_key.keys.drop(1).each do |key|
-        words = @hash_with_length_as_key[key]
-        words.each do |word|
-          break if stacked_trees[candidate].keys.include?(word.length)
+      @length = candidate.length
+      @search = candidate
 
-          permutations     = remove_string(word)
+      while @length < @max
+        words   = @hash_with_length_as_key[@length]
+        @length += 1
+        next if words.blank?
+        # binding.pry
+        words.each do |word|
+          # break if stacked_trees[candidate].keys.include?(word.length)
+
+          puts "word: #{word}"
+
+          permutations = remove_string(word)
           permutations.each do |perm|
             #perm exists in dictionnary?
-            if @sorted_words[perm.chars.sort.join]
-              stacked_trees[candidate][word.length] = @sorted_words[perm.chars.sort.join]
+            puts ""
+            puts "@search: #{@search}"
+            puts "@search.chars.sort.join: #{@search.chars.sort.join}"
+            puts "perm.chars.sort.join: #{perm.chars.sort.join}"
+            puts "@sorted_words[perm.chars.sort.join]: #{@sorted_words[perm.chars.sort.join]}"
+            puts ""
+            if perm.chars.sort.join == @search.chars.sort.join
+              # binding.pry
+              puts "found word: #{word}"
+              stacked_trees[candidate] << word
+              @search = word
+              # binding.pry if word == "oriels"
               break
             end
           end
         end
+
+        puts "@length: #{@length}"
+        puts "@max: #{@max}"
       end
     end
-    binding.pry
+
+    puts "stacked_trees: #{stacked_trees.inspect}"
   end
 
   def find_word_trees
@@ -55,21 +80,47 @@ class Dictionary
       stacked_trees[key] = {}
       words.each do |word|
         related_words = find_related_words(word)
+        binding.pry if word == "traditionless"
         related_words.prepend(word)
-        stacked_trees[key][word] = related_words if related_words.count > 1
+        if related_words.count > 1 && related_words.last.length == 3
+          stacked_trees[key][word] = related_words
+        end
       end
+      stacked_trees.delete(key) if stacked_trees[key].blank?
     end
     # binding.pry
     puts "stacked_trees: #{stacked_trees}"
     # stacked_trees.values
-    # longest_tree(stacked_trees)
+    longest_tree(stacked_trees)
   end
 
   private
 
-  def find_related_words(word, related_words=[])
-    puts "word: #{word}"
+  def find_related_words(word, possible_stacks=[], original_word = nil, previous_word = nil)
+    if original_word.nil?
+      original_word = word
+      possible_stacks << original_word
+    end
 
+    applicable_words = find_related_word(word)
+
+    if applicable_words.present?
+      applicable_words.each do |applicable_word|
+        new_stack = possible_stacks.flatten.dup.uniq.append(applicable_word).uniq
+        possible_stacks << new_stack
+        return new_stack if new_stack.last.length == 3
+        puts ""
+        puts "applicable_word: #{applicable_word}"
+        # puts "applicable_words: #{applicable_words}"
+        puts ""
+        find_related_words(applicable_word, possible_stacks, original_word, previous_word)
+      end
+    end
+
+    possible_stacks
+  end
+
+  def find_related_word(word)
     applicable_words = []
     permutations     = remove_string(word)
     permutations.each do |perm|
@@ -78,23 +129,19 @@ class Dictionary
         applicable_words << @sorted_words[perm.chars.sort.join]
       end
     end
+    applicable_words
+  end
 
-    if applicable_words.present?
-      related_word = applicable_words.last
+  def find_recursive_related_word(word, related=[])
+    words = find_related_word(word)
 
-      puts ""
-      puts "related_word: #{related_word}"
-      puts "related_word.length: #{related_word.length}"
-      puts "related_words.group_by {|l| l.length}: #{related_words.group_by { |l| l.length }}"
-      puts "related_words.group_by {|l| l.length}.keys: #{related_words.group_by { |l| l.length }.keys}"
-      puts "related_words.group_by {|l| l.length}.keys.include?(related_word.length): #{related_words.group_by { |l| l.length }.keys.include?(related_word.length)}"
-      puts ""
-
-      related_words << related_word
-      find_related_words(related_word, related_words)
+    while words.count > 0
+      words.each do |w|
+        words = find_related_word(w)
+        related << words
+      end
     end
-
-    related_words.flatten
+    related
   end
 
   def read_file
@@ -115,8 +162,8 @@ class Dictionary
       @sorted_words[line.chars.sort.join] = line
 
     end
-    # @hash_with_length_as_key = @hash_with_length_as_key.sort.reverse.to_h
-    @hash_with_length_as_key = @hash_with_length_as_key.sort.to_h
+    @hash_with_length_as_key = @hash_with_length_as_key.sort.reverse.to_h
+    # @hash_with_length_as_key = @hash_with_length_as_key.sort.to_h
   end
 
   def remove_string(string)
