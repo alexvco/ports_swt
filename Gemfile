@@ -14,6 +14,7 @@ group :development do
   gem "quiet_assets"
   gem "spring"
   gem "spring-commands-rspec"
+  gem "pry-byebug"
   gem 'guard-rspec', require: false
   gem 'rubocop'
   gem 'guard-rubocop'
