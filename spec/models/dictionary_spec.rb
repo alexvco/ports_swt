@@ -16,7 +16,9 @@ describe Dictionary, type: :model do
       dictionary1 = Dictionary.new(data_file1)
       # dictionary2 = Dictionary.new(data_file2)
 
-      expect(dictionary1.find_word_trees).to eq(["ire", "rite", "trite", "titres", "tinters", "tritones", "stationer", "iterations", "orientalist", "orientalists", "traditionless"])
+      expect(dictionary1.find_word_trees).to eq(["ton", "snot", "notes", "lentos", "tolanes", "elations", "tensional", "lineations", "nationalise", "nationalizes", "nationalizers", "renationalizes", "generalizations"])
+
+      # expect(dictionary1.find_word_trees).to eq(["ire", "rite", "trite", "titres", "tinters", "tritones", "stationer", "iterations", "orientalist", "orientalists", "traditionless"])
 
       # expect(dictionary2.find_word_trees).to eq([["ton", "snot", "notes", "lentos", "tolanes", "elations", "tensional", "lineations", "nationalise", "nationalizes", "nationalizers", "renationalizes", "generalizations"]])
     end

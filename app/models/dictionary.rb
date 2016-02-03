@@ -15,61 +15,6 @@ class Dictionary
     @hash_with_length_as_key[length] || []
   end
 
-  def find_possible_stacks
-    candidates = @hash_with_length_as_key[3]
-
-    stacked_trees = {}
-
-    @max = @hash_with_length_as_key.keys.max
-
-    ["ire"].each do |candidate|
-      # stacked_trees[candidate] ||= {}
-      stacked_trees[candidate] ||= []
-
-      puts "candidate: #{candidate.inspect}"
-      puts ""
-
-      @length = candidate.length
-      @search = candidate
-
-      while @length < @max
-        words   = @hash_with_length_as_key[@length]
-        @length += 1
-        next if words.blank?
-        # binding.pry
-        words.each do |word|
-          # break if stacked_trees[candidate].keys.include?(word.length)
-
-          puts "word: #{word}"
-
-          permutations = remove_string(word)
-          permutations.each do |perm|
-            #perm exists in dictionnary?
-            puts ""
-            puts "@search: #{@search}"
-            puts "@search.chars.sort.join: #{@search.chars.sort.join}"
-            puts "perm.chars.sort.join: #{perm.chars.sort.join}"
-            puts "@sorted_words[perm.chars.sort.join]: #{@sorted_words[perm.chars.sort.join]}"
-            puts ""
-            if perm.chars.sort.join == @search.chars.sort.join
-              # binding.pry
-              puts "found word: #{word}"
-              stacked_trees[candidate] << word
-              @search = word
-              # binding.pry if word == "oriels"
-              break
-            end
-          end
-        end
-
-        puts "@length: #{@length}"
-        puts "@max: #{@max}"
-      end
-    end
-
-    puts "stacked_trees: #{stacked_trees.inspect}"
-  end
-
   def find_word_trees
     stacked_trees = {}
 
@@ -80,39 +25,66 @@ class Dictionary
       stacked_trees[key] = {}
       words.each do |word|
         related_words = find_related_words(word)
-        binding.pry if word == "traditionless"
-        related_words.prepend(word)
-        if related_words.count > 1 && related_words.last.length == 3
-          stacked_trees[key][word] = related_words
-        end
+        # binding.pry if word == "generalizations"
+
+        # puts "related_words: #{related_words}"
+
+        tree = find_tree_in_stack(related_words)
+
+        # puts "tree: #{tree}" if tree
+
+        stacked_trees[key][word] = tree if tree
       end
       stacked_trees.delete(key) if stacked_trees[key].blank?
     end
     # binding.pry
-    puts "stacked_trees: #{stacked_trees}"
     # stacked_trees.values
     longest_tree(stacked_trees)
   end
 
   private
 
-  def find_related_words(word, possible_stacks=[], original_word = nil, previous_word = nil)
+  def find_tree_in_stack(hash)
+    hash.values.find_all { |v| v.last.length == 3 }.last
+  end
+
+
+  def find_related_words(word, possible_stacks={}, original_word = nil, previous_word = nil)
     if original_word.nil?
       original_word = word
-      possible_stacks << original_word
+      previous_word = word
+      possible_stacks[word] = [original_word]
+      # puts "possible_stacks: #{possible_stacks}"
     end
+    # puts ""
+    # puts "----"
+    # puts "word: #{word}"
+    # puts "previous_word: #{previous_word}"
 
     applicable_words = find_related_word(word)
 
+
+
+    if applicable_words== ["notes", "lenos", "lento"] && previous_word == "lentos"
+      puts "HERE!!"
+      puts "previous_word: #{previous_word}"
+      puts "possible_stacks[notes]: #{possible_stacks["notes"]}"
+      puts "possible_stacks: #{possible_stacks}"
+      puts "lenots: #{possible_stacks["lentos"]}"
+    end
+    # puts "possible_stacks FIRST: #{possible_stacks}"
+    # puts "applicable_words: #{applicable_words}"
+
+    new_stack = possible_stacks[previous_word].dup.append(word).uniq
+    possible_stacks[word] = new_stack
+    # puts "new_stack: #{new_stack}"
+    # puts "possible_stacks AFTER: #{possible_stacks}"
+    # puts "----"
+    # puts ""
+
     if applicable_words.present?
       applicable_words.each do |applicable_word|
-        new_stack = possible_stacks.flatten.dup.uniq.append(applicable_word).uniq
-        possible_stacks << new_stack
-        return new_stack if new_stack.last.length == 3
-        puts ""
-        puts "applicable_word: #{applicable_word}"
-        # puts "applicable_words: #{applicable_words}"
-        puts ""
+        previous_word = word
         find_related_words(applicable_word, possible_stacks, original_word, previous_word)
       end
     end
@@ -186,7 +158,8 @@ class Dictionary
   end
 
   def longest_tree(hash)
-    hash[hash.keys.max_by { |k| hash[k].keys.max }].max.last.reverse
+    # hash[hash.keys.max_by { |k| hash[k].keys.max }].max.last.reverse
+    hash[hash.keys.max].values.flatten.reverse
   end
 
 end
