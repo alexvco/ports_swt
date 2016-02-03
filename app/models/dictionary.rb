@@ -19,10 +19,10 @@ class Dictionary
       words.each do |word|
         possible_trees = find_possible_permuted_trees(word: word)
         stack_tree     = find_full_stack_tree_in_trees(possible_trees)
-        return stack_tree.reverse if stack_tree
+        return stack_tree.reverse if stack_tree && stack_tree.count > 1
       end
     end
-    {}
+    []
   end
 
   private
