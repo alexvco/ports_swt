@@ -16,35 +16,42 @@ class Dictionary
   end
 
   def find_word_trees
-    stacked_trees = {}
+    # stacked_trees = {}
 
     @hash_with_length_as_key.keys.each do |key|
       words = @hash_with_length_as_key[key]
       puts "key: #{key}"
 
-      stacked_trees[key] = {}
+      # stacked_trees[key] = {}
       words.each do |word|
         related_words = find_related_words(word)
-        # binding.pry if word == "generalizations"
 
         # puts "related_words: #{related_words}"
 
-        tree = find_tree_in_stack(related_words)
+        # binding.pry if word == "traditionless"
 
+        tree = find_tree_in_stack(related_words)
+        # binding.pry if word == "generalizations"
         # puts "tree: #{tree}" if tree
 
-        stacked_trees[key][word] = tree if tree
+        if tree
+          return tree.reverse
+          # stacked_trees[key][word] = tree
+          # break
+        end
       end
-      stacked_trees.delete(key) if stacked_trees[key].blank?
+      # stacked_trees.delete(key) if stacked_trees[key].blank?
     end
-    # binding.pry
+    binding.pry
     # stacked_trees.values
-    longest_tree(stacked_trees)
+    # longest_tree(stacked_trees)
+    {}
   end
 
   private
 
   def find_tree_in_stack(hash)
+    # binding.pry
     hash.values.find_all { |v| v.last.length == 3 }.last
   end
 
@@ -52,8 +59,8 @@ class Dictionary
   def find_related_words(word, possible_stacks={}, original_word = nil, previous_word = nil)
     if original_word.nil?
       original_word = word
-      previous_word = word
-      possible_stacks[word] = [original_word]
+      previous_word = [word]
+      possible_stacks[[word]] = [word]
       # puts "possible_stacks: #{possible_stacks}"
     end
     # puts ""
@@ -63,20 +70,18 @@ class Dictionary
 
     applicable_words = find_related_word(word)
 
-
-
-    if applicable_words== ["notes", "lenos", "lento"] && previous_word == "lentos"
-      puts "HERE!!"
-      puts "previous_word: #{previous_word}"
-      puts "possible_stacks[notes]: #{possible_stacks["notes"]}"
-      puts "possible_stacks: #{possible_stacks}"
-      puts "lenots: #{possible_stacks["lentos"]}"
-    end
     # puts "possible_stacks FIRST: #{possible_stacks}"
     # puts "applicable_words: #{applicable_words}"
 
+    # puts ""
+    # puts "possible_stacks: #{possible_stacks}"
+    # puts "previous_word: #{previous_word}"
     new_stack = possible_stacks[previous_word].dup.append(word).uniq
-    possible_stacks[word] = new_stack
+    # puts "new_stack: #{new_stack}"
+    # puts ""
+    possible_stacks[new_stack] = new_stack
+
+    return possible_stacks if new_stack.last.length == 3
     # puts "new_stack: #{new_stack}"
     # puts "possible_stacks AFTER: #{possible_stacks}"
     # puts "----"
@@ -84,7 +89,7 @@ class Dictionary
 
     if applicable_words.present?
       applicable_words.each do |applicable_word|
-        previous_word = word
+        previous_word = new_stack
         find_related_words(applicable_word, possible_stacks, original_word, previous_word)
       end
     end
