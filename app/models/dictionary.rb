@@ -1,5 +1,4 @@
 class Dictionary
-
   def initialize(data_file)
     @data_file = data_file
     read_file
@@ -15,10 +14,10 @@ class Dictionary
 
   def find_longest_word_stacked_tree
     @hash_with_length_as_key.keys.each do |key|
-      puts "processing words with length: #{key}"
+      Rails.logger.info("processing words with length: #{key}")
       words = @hash_with_length_as_key[key]
       words.each do |word|
-        possible_trees = find_possible_permuted_trees(word)
+        possible_trees = find_possible_permuted_trees(word: word)
         stack_tree     = find_full_stack_tree_in_trees(possible_trees)
         return stack_tree.reverse if stack_tree
       end
@@ -31,10 +30,10 @@ class Dictionary
   attr_reader :data_file
 
   def find_full_stack_tree_in_trees(hash)
-    hash.values.find_all { |v| v.last.length == 3 }.last
+    hash.values.reverse.find { |v| v.last.length == 3 }
   end
 
-  def find_possible_permuted_trees(word, possible_stacks = {}, previous_stack_key = nil)
+  def find_possible_permuted_trees(word: word, possible_stacks: {}, previous_stack_key: nil)
     if possible_stacks.empty?
       previous_stack_key      = [word]
       possible_stacks[[word]] = [word]
@@ -47,8 +46,7 @@ class Dictionary
 
     if possible_shorter_words.present?
       possible_shorter_words.each do |possible_shorter_word|
-        previous_stack_key = new_stack
-        find_possible_permuted_trees(possible_shorter_word, possible_stacks, previous_stack_key)
+        find_possible_permuted_trees(word: possible_shorter_word, possible_stacks: possible_stacks, previous_stack_key: new_stack)
       end
     end
 
@@ -94,4 +92,3 @@ class Dictionary
     arr.uniq
   end
 end
-
