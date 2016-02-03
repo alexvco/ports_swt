@@ -1,7 +1,5 @@
 class Dictionary
 
-  attr_reader :data_file
-
   def initialize(data_file)
     @data_file = data_file
     read_file
@@ -15,115 +13,61 @@ class Dictionary
     @hash_with_length_as_key[length] || []
   end
 
-  def find_word_trees
-    # stacked_trees = {}
-
+  def find_longest_word_stacked_tree
     @hash_with_length_as_key.keys.each do |key|
+      puts "processing words with length: #{key}"
       words = @hash_with_length_as_key[key]
-      puts "key: #{key}"
-
-      # stacked_trees[key] = {}
       words.each do |word|
-        related_words = find_related_words(word)
-
-        # puts "related_words: #{related_words}"
-
-        # binding.pry if word == "traditionless"
-
-        tree = find_tree_in_stack(related_words)
-        # binding.pry if word == "generalizations"
-        # puts "tree: #{tree}" if tree
-
-        if tree
-          return tree.reverse
-          # stacked_trees[key][word] = tree
-          # break
-        end
+        possible_trees = find_possible_permuted_trees(word)
+        stack_tree     = find_full_stack_tree_in_trees(possible_trees)
+        return stack_tree.reverse if stack_tree
       end
-      # stacked_trees.delete(key) if stacked_trees[key].blank?
     end
-    binding.pry
-    # stacked_trees.values
-    # longest_tree(stacked_trees)
     {}
   end
 
   private
 
-  def find_tree_in_stack(hash)
-    # binding.pry
+  attr_reader :data_file
+
+  def find_full_stack_tree_in_trees(hash)
     hash.values.find_all { |v| v.last.length == 3 }.last
   end
 
-
-  def find_related_words(word, possible_stacks={}, original_word = nil, previous_word = nil)
-    if original_word.nil?
-      original_word = word
-      previous_word = [word]
+  def find_possible_permuted_trees(word, possible_stacks = {}, previous_stack_key = nil)
+    if possible_stacks.empty?
+      previous_stack_key      = [word]
       possible_stacks[[word]] = [word]
-      # puts "possible_stacks: #{possible_stacks}"
     end
-    # puts ""
-    # puts "----"
-    # puts "word: #{word}"
-    # puts "previous_word: #{previous_word}"
 
-    applicable_words = find_related_word(word)
-
-    # puts "possible_stacks FIRST: #{possible_stacks}"
-    # puts "applicable_words: #{applicable_words}"
-
-    # puts ""
-    # puts "possible_stacks: #{possible_stacks}"
-    # puts "previous_word: #{previous_word}"
-    new_stack = possible_stacks[previous_word].dup.append(word).uniq
-    # puts "new_stack: #{new_stack}"
-    # puts ""
+    possible_shorter_words     = next_possible_shorter_words(word)
+    new_stack                  = possible_stacks[previous_stack_key].dup.append(word).uniq
     possible_stacks[new_stack] = new_stack
-
     return possible_stacks if new_stack.last.length == 3
-    # puts "new_stack: #{new_stack}"
-    # puts "possible_stacks AFTER: #{possible_stacks}"
-    # puts "----"
-    # puts ""
 
-    if applicable_words.present?
-      applicable_words.each do |applicable_word|
-        previous_word = new_stack
-        find_related_words(applicable_word, possible_stacks, original_word, previous_word)
+    if possible_shorter_words.present?
+      possible_shorter_words.each do |possible_shorter_word|
+        previous_stack_key = new_stack
+        find_possible_permuted_trees(possible_shorter_word, possible_stacks, previous_stack_key)
       end
     end
 
     possible_stacks
   end
 
-  def find_related_word(word)
-    applicable_words = []
-    permutations     = remove_string(word)
-    permutations.each do |perm|
-      #perm exists in dictionnary?
-      if @sorted_words[perm.chars.sort.join]
-        applicable_words << @sorted_words[perm.chars.sort.join]
+  def next_possible_shorter_words(word)
+    possible_shorter_words = []
+    shorter_permutations   = shorter_permutations_of_word(word)
+    shorter_permutations.each do |permutation|
+      if @sorted_words[permutation.chars.sort.join]
+        possible_shorter_words << @sorted_words[permutation.chars.sort.join]
       end
     end
-    applicable_words
-  end
-
-  def find_recursive_related_word(word, related=[])
-    words = find_related_word(word)
-
-    while words.count > 0
-      words.each do |w|
-        words = find_related_word(w)
-        related << words
-      end
-    end
-    related
+    possible_shorter_words
   end
 
   def read_file
     @hash_with_length_as_key = {}
-    @permutations            = {}
     @sorted_words            = {}
 
     File.readlines(data_file).each do |line|
@@ -133,17 +77,14 @@ class Dictionary
       next if line.length < 3
 
       @hash_with_length_as_key[line.length] ||= []
-      @hash_with_length_as_key[line.length] << line unless @hash_with_length_as_key[line.length].include?(line) #traditionless
-
-      # @sorted_words[line.chars.sort.join] ||= []
+      @hash_with_length_as_key[line.length] << line unless @hash_with_length_as_key[line.length].include?(line)
       @sorted_words[line.chars.sort.join] = line
-
     end
+
     @hash_with_length_as_key = @hash_with_length_as_key.sort.reverse.to_h
-    # @hash_with_length_as_key = @hash_with_length_as_key.sort.to_h
   end
 
-  def remove_string(string)
+  def shorter_permutations_of_word(string)
     arr = []
     (0..string.length - 1).each do |i|
       str = string.dup
@@ -152,20 +93,5 @@ class Dictionary
     end
     arr.uniq
   end
-
-  def permutes_from?(longer, shorter)
-    perms = @permutations[longer]
-    return false if perms.blank?
-    perms.each do |perm|
-      return true if perm.chars.sort == shorter.chars.sort
-    end
-    false
-  end
-
-  def longest_tree(hash)
-    # hash[hash.keys.max_by { |k| hash[k].keys.max }].max.last.reverse
-    hash[hash.keys.max].values.flatten.reverse
-  end
-
 end
 
