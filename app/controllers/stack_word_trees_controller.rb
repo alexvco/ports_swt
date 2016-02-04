@@ -41,6 +41,7 @@ class StackWordTreesController < ApplicationController
   end
 
   def stack_word_tree_params
-    params.require(:stack_word_tree).permit(:name, :result, :data_file)
+    #file field wont get set if user doesn't select it use fetch instead of require
+    params.fetch(:stack_word_tree, {}).permit(:data_file)
   end
 end
