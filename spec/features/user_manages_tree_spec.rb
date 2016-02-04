@@ -2,7 +2,7 @@ require "rails_helper"
 
 feature "User Manages StackWordTrees" do
 
-  scenario "User Views Existing Trees" do
+  scenario "Views Existing Trees" do
     tree1.update_column(:name, "Tree1")
     tree2.update_column(:name, "Tree2")
 
@@ -13,7 +13,22 @@ feature "User Manages StackWordTrees" do
     expect(current_path).to eq(stack_word_trees_path)
   end
 
-  scenario "Creating a new trees" do
+  scenario "Creating a new trees from the home page" do
+    visit root_path
+
+    expect(page).to_not have_content("Here Is Your Awesome Stacked Word Tree!")
+    expect(page).to_not have_content("ire")
+
+    attach_file "Data file", data_file
+    click_on "Find My Stacked Word Tree"
+
+    expect(page).to have_content("Here Is Your Awesome Stacked Word Tree!")
+    expect(page).to have_content("ire")
+    expect(page).to have_content("tritones")
+    expect(page).to have_content("traditionless")
+  end
+
+  scenario "Creating a new trees from the trees page" do
     visit_tree_page
     click_on "New Stack word tree"
 

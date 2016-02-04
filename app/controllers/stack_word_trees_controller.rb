@@ -22,8 +22,10 @@ class StackWordTreesController < ApplicationController
       if @stack_word_tree.save
         @stack_word_tree.find_longest_stack_tree
         format.html { redirect_to edit_stack_word_tree_path(@stack_word_tree), notice: "Stack word tree was successfully created." }
+        format.js
       else
         format.html { render :new }
+        format.js
       end
     end
   end
