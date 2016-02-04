@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe StackWordTreesController, type: :controller do
-
   describe "GET #index" do
     it "assigns all stack_word_trees as @stack_word_trees" do
       stack_word_tree = StackWordTree.create! valid_attributes
@@ -16,15 +15,6 @@ describe StackWordTreesController, type: :controller do
       get :new, {}
 
       expect(assigns(:stack_word_tree)).to be_a_new(StackWordTree)
-    end
-  end
-
-  describe "GET #edit" do
-    it "assigns the requested stack_word_tree as @stack_word_tree" do
-      stack_word_tree = StackWordTree.create! valid_attributes
-      get :edit, { id: stack_word_tree.to_param }
-
-      expect(assigns(:stack_word_tree)).to eq(stack_word_tree)
     end
   end
 
@@ -43,10 +33,10 @@ describe StackWordTreesController, type: :controller do
         expect(assigns(:stack_word_tree)).to be_persisted
       end
 
-      it "redirects to the edit page of created stack_word_tree" do
+      it "redirects to the created stack_word_tree" do
         post :create, { stack_word_tree: valid_attributes }
 
-        expect(response).to redirect_to(edit_stack_word_tree_path(StackWordTree.last))
+        expect(response).to redirect_to(StackWordTree.last)
       end
 
       it "finds the longest stack tree based on the data file" do
@@ -72,54 +62,12 @@ describe StackWordTreesController, type: :controller do
     end
   end
 
-  describe "PUT #update" do
-    context "with valid params" do
-      it "updates the requested stack_word_tree" do
-        stack_word_tree = StackWordTree.create! valid_attributes
-        put :update, { id: stack_word_tree.to_param, stack_word_tree: new_attributes }
-        stack_word_tree.reload
+  describe "GET #show" do
+    it "assigns the @stack_word_tree" do
+      stack_word_tree = StackWordTree.create! valid_attributes
+      get :show, { id: stack_word_tree.to_param }
 
-        expect(stack_word_tree.name).to eq("NewName")
-      end
-
-      it "assigns the requested stack_word_tree as @stack_word_tree" do
-        stack_word_tree = StackWordTree.create! valid_attributes
-        put :update, { id: stack_word_tree.to_param, stack_word_tree: valid_attributes }
-
-        expect(assigns(:stack_word_tree)).to eq(stack_word_tree)
-      end
-
-      it "redirects to the updated stack_word_tree" do
-        stack_word_tree = StackWordTree.create! valid_attributes
-        put :update, { id: stack_word_tree.to_param, stack_word_tree: valid_attributes }
-
-        expect(response).to redirect_to(edit_stack_word_tree_path(stack_word_tree))
-      end
-
-      it "updates the stack tree results" do
-        stack_word_tree = StackWordTree.create! valid_attributes
-        stack_word_tree.update_column(:result, [])
-        put :update, { id: stack_word_tree.to_param, stack_word_tree: valid_attributes }
-        stack_word_tree.reload
-
-        expect(stack_word_tree.result).to eq(["ire", "rite", "trite", "titres", "tinters", "tritones", "stationer", "iterations", "orientalist", "orientalists", "traditionless"])
-      end
-    end
-
-    context "with invalid params" do
-      it "assigns the stack_word_tree as @stack_word_tree" do
-        stack_word_tree = StackWordTree.create! valid_attributes
-        put :update, { id: stack_word_tree.to_param, stack_word_tree: invalid_attributes }
-
-        expect(assigns(:stack_word_tree)).to eq(stack_word_tree)
-      end
-
-      it "re-renders the 'edit' template" do
-        stack_word_tree = StackWordTree.create! valid_attributes
-        put :update, { id: stack_word_tree.to_param, stack_word_tree: invalid_attributes }
-
-        expect(response).to render_template("edit")
-      end
+      expect(assigns(:stack_word_tree)).to eq(stack_word_tree)
     end
   end
 

@@ -22,33 +22,7 @@ feature "User Manages StackWordTrees" do
     attach_file "Data file", data_file
     click_on "Find My Stacked Word Tree"
 
-    expect(page).to have_content("Here Is Your Awesome Stacked Word Tree!")
-    expect(page).to have_content("ire")
-    expect(page).to have_content("tritones")
-    expect(page).to have_content("traditionless")
-  end
-
-  scenario "Creating a new trees from the trees page" do
-    visit_tree_page
-    click_on "New Stack word tree"
-
-    attach_file "Data file", data_file
-    click_on "Create Stack word tree"
-
-    expect(page).to have_content("Stack word tree was successfully created.")
-    expect(page).to have_content("ire")
-    expect(page).to have_content("tritones")
-    expect(page).to have_content("traditionless")
-  end
-
-  scenario "Updating a tree" do
-    tree1.update_column(:result, ["foo", "bar"])
-    visit edit_stack_word_tree_path(tree1)
-
-    attach_file "Data file", data_file
-    click_on "Update Stack word tree"
-
-    expect(page).to have_content("Stack word tree was successfully updated.")
+    expect(page).to have_content("Your stack tree is called #{StackWordTree.first.name}, take good care of it!")
     expect(page).to have_content("ire")
     expect(page).to have_content("tritones")
     expect(page).to have_content("traditionless")

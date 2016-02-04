@@ -13,13 +13,10 @@
       <tr>
         <td><%= stack_word_tree.name %></td>
         <td>
-          <%= link_to 'Edit', edit_stack_word_tree_path(stack_word_tree), class: "btn btn-default" %>
+          <%= link_to 'Show', stack_word_tree_path(stack_word_tree), class: "btn btn-default" %>
           <%= link_to 'Remove Tree', stack_word_tree, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<br>
-
-<%= link_to 'New Stack word tree', new_stack_word_tree_path, class: "btn btn-sm btn-primary" %>

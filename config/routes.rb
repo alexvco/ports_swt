@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
-  root "home#index"
-  resources :stack_word_trees, except: [:show]
+  root "stack_word_trees#new"
+  resources :stack_word_trees, except: [:update, :edit]
 end
