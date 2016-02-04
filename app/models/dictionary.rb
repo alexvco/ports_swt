@@ -4,14 +4,6 @@ class Dictionary
     read_file
   end
 
-  def word_exists_in_dictionary?(word)
-    @hash_with_word_as_key[word]
-  end
-
-  def find_words_with_length(length)
-    @hash_with_length_as_key[length] || []
-  end
-
   def find_longest_word_stacked_tree
     @hash_with_length_as_key.keys.each do |key|
       log_process(key)
