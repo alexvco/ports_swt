@@ -9,6 +9,7 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.0'
 gem "pry-rails"
 gem "simple_form"
+gem "carrierwave"
 gem "faker"
 
 group :development do

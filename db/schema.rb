@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160204013059) do
+ActiveRecord::Schema.define(version: 20160204014324) do
 
   create_table "stack_word_trees", force: :cascade do |t|
     t.string   "name"
     t.text     "result"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "data_file"
   end
 
 end
