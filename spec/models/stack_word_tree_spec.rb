@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 describe StackWordTree, type: :model do
+
+  it { should serialize(:result) }
+
   context "default" do
     it "has a default random name" do
       allow(Faker::App).to receive(:name).and_return("RandomName")

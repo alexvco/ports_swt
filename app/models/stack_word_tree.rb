@@ -1,5 +1,6 @@
 class StackWordTree < ActiveRecord::Base
-  mount_uploader :data_file, DataFileUploader
+  serialize :result, Array
+  mount_uploader :data_file, ::DataFileUploader
 
   after_create :generate_random_name
 

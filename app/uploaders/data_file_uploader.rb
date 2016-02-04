@@ -6,6 +6,6 @@ class DataFileUploader < CarrierWave::Uploader::Base
   end
 
   def extension_white_list
-    %w(text data)
+    %w(text dat)
   end
 end
