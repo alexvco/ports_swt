@@ -48,6 +48,13 @@ describe StackWordTreesController, type: :controller do
 
         expect(response).to redirect_to(edit_stack_word_tree_path(StackWordTree.last))
       end
+
+      it "finds the longest stack tree based on the data file" do
+        post :create, { stack_word_tree: valid_attributes }
+        tree = StackWordTree.first
+
+        expect(tree.result).to eq(["ire", "rite", "trite", "titres", "tinters", "tritones", "stationer", "iterations", "orientalist", "orientalists", "traditionless"])
+      end
     end
 
     context "with invalid params" do
@@ -73,7 +80,6 @@ describe StackWordTreesController, type: :controller do
         stack_word_tree.reload
 
         expect(stack_word_tree.name).to eq("NewName")
-        expect(stack_word_tree.result).to eq(["foo", "bar", "baz"])
       end
 
       it "assigns the requested stack_word_tree as @stack_word_tree" do
@@ -88,6 +94,15 @@ describe StackWordTreesController, type: :controller do
         put :update, { id: stack_word_tree.to_param, stack_word_tree: valid_attributes }
 
         expect(response).to redirect_to(edit_stack_word_tree_path(stack_word_tree))
+      end
+
+      it "updates the stack tree results" do
+        stack_word_tree = StackWordTree.create! valid_attributes
+        stack_word_tree.update_column(:result, [])
+        put :update, { id: stack_word_tree.to_param, stack_word_tree: valid_attributes }
+        stack_word_tree.reload
+
+        expect(stack_word_tree.result).to eq(["ire", "rite", "trite", "titres", "tinters", "tritones", "stationer", "iterations", "orientalist", "orientalists", "traditionless"])
       end
     end
 
@@ -126,19 +141,15 @@ describe StackWordTreesController, type: :controller do
   end
 
   def new_attributes
-    valid_attributes.merge(name: "NewName", data_file: data_file)
+    valid_attributes.merge(name: "NewName")
   end
 
   def valid_attributes
-    {
-        result: ["foo", "bar", "baz"]
-    }
+    { data_file: data_file }
   end
 
   def invalid_attributes
-    {
-        data_file: image_file
-    }
+    { data_file: image_file }
   end
 
   def image_file
@@ -146,6 +157,6 @@ describe StackWordTreesController, type: :controller do
   end
 
   def data_file
-    @data_file ||= Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec', 'support', 'no_tree_file.dat'))
+    @data_file ||= Rack::Test::UploadedFile.new(File.join(Rails.root, 'spec', 'support', 'sample_word_traditionless.dat'))
   end
 end

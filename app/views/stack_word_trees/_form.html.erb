@@ -1,11 +1,17 @@
 <%= simple_form_for(@stack_word_tree) do |f| %>
-  <%= f.error_notification %>
+    <%= f.error_notification %>
 
-  <div class="form-inputs">
-    <%= f.input :data_file %>
-  </div>
+    <div class="form-inputs">
+      <%= f.input :data_file %>
+    </div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
+    <% if @stack_word_tree.result %>
+        <% @stack_word_tree.result.each do |result| %>
+            <p><%= result %></p>
+        <% end %>
+    <% end %>
+
+    <div class="form-actions">
+      <%= f.button :submit, class: "btn btn-success" %>
+    </div>
 <% end %>

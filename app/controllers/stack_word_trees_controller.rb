@@ -20,6 +20,7 @@ class StackWordTreesController < ApplicationController
 
     respond_to do |format|
       if @stack_word_tree.save
+        @stack_word_tree.find_longest_stack_tree
         format.html { redirect_to edit_stack_word_tree_path(@stack_word_tree), notice: "Stack word tree was successfully created." }
       else
         format.html { render :new }
@@ -30,6 +31,7 @@ class StackWordTreesController < ApplicationController
   def update
     respond_to do |format|
       if @stack_word_tree.update(stack_word_tree_params)
+        @stack_word_tree.find_longest_stack_tree
         format.html { redirect_to edit_stack_word_tree_path(@stack_word_tree), notice: "Stack word tree was successfully updated." }
       else
         format.html { render :edit }
@@ -40,7 +42,7 @@ class StackWordTreesController < ApplicationController
   def destroy
     @stack_word_tree.destroy
     respond_to do |format|
-      format.html { redirect_to stack_word_trees_url, notice: "Stack word tree was successfully destroyed." }
+      format.html { redirect_to stack_word_trees_url, notice: "Stack word tree was successfully removed." }
     end
   end
 
