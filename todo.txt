@@ -33,14 +33,14 @@ GRAVEYARD:
 
 Notes:
 
-StackedWordTrees:
-	1.	A StackedWordTree is a sequence of words, starting with a 3-letter word, that are incrementally longer than each other via the addition of a letter
-	2.	Example of a StackedWordTree:
+AwesomeStackedWordTrees:
+	1.	A AwesomeStackedWordTree is a sequence of words, starting with a 3-letter word, that are incrementally longer than each other via the addition of a letter
+	2.	Example of a AwesomeStackedWordTree:
 	1.	bus
 	2.	stub
 	3.	burst
 	4.	bursts
-	3.	All words in a StackedWordTree must appear in the input wordlist
+	3.	All words in a AwesomeStackedWordTree must appear in the input wordlist
 
 
 

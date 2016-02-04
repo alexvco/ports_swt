@@ -26,6 +26,7 @@ pickle-email-*.html
 .rvmrc
 .idea/
 .ruby-version
+.rbenv-gemsets
 
 public/javascripts
 public/stylesheets

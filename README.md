@@ -1,4 +1,4 @@
-# StackedWordTree
+# AwesomeStackedWordTree
 
 This is a rails 4 project, used to solve a code challenge for Adgear. 
 
