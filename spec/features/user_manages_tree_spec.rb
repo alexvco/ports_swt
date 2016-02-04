@@ -26,6 +26,15 @@ feature "User Manages StackWordTrees" do
     expect(page).to have_content("ire")
     expect(page).to have_content("tritones")
     expect(page).to have_content("traditionless")
+    expect(current_path).to eq(stack_word_tree_path(StackWordTree.first))
+  end
+
+  scenario "Views Details Of a Tree" do
+    tree1.update_column(:name, "Tree1")
+    visit_tree_page
+
+    click_on "View Tree Details"
+    expect(page).to have_content("Your stack tree is called #{StackWordTree.first.name}, take good care of it!")
   end
 
   scenario "Removing a tree" do

@@ -1,12 +1,32 @@
-<h3>Your stack tree is called <%= @stack_word_tree.name %>, take good care of it!</h3>
-<h4>Here is the stacked word tree of the longest word:</h4>
-<hr>
+<div class="row">
+  <div class="col-md-12">
+    <h3>Your stack tree is called <%= @stack_word_tree.name %>, take good care of it!</h3>
+    <h4>Here is the stacked word tree of the longest word:</h4>
+    <hr>
+  </div>
+</div>
 
-<% if @stack_word_tree.result %>
-    <% @stack_word_tree.result.each do |result| %>
-        <p><%= result %></p>
+<div class="row">
+  <div class="col-md-9">
+    <div class="tree-<%= @stack_word_tree.id %>"></div>
+  </div>
+  <div class="col-md-3">
+    <% if @stack_word_tree.result %>
+        <% @stack_word_tree.result.each do |result| %>
+            <p><%= result %></p>
+        <% end %>
     <% end %>
-<% end %>
+  </div>
+</div>
 
-<br>
+<script>
+  <%
+     tree = { name: "flare", children: [] }
+     @stack_word_tree.result.each do |result|
+        tree[:children] << { name: result, size: result.length }
+     end
+   %>
+    var treeData = <%= tree.to_json.html_safe %>;
+  adgear.ui.stackWordTree.drawStackWordTree(".tree-<%= @stack_word_tree.id.to_s %>", treeData);
+</script>
 <%= link_to("View All Trees", stack_word_trees_path, class: "btn btn-default") %>

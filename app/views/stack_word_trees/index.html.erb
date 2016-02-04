@@ -1,22 +1,24 @@
 <h1>Listing Stack Word Trees</h1>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th colspan="2">Actions</th>
-    </tr>
-  </thead>
+<% @stack_word_trees.each do |stack_word_tree| %>
+    <%
+      tree = { name: "flare", children: [] }
+      stack_word_tree.result.each do |result|
+        tree[:children] << { name: result, size: result.length }
+      end
+    %>
+    <div class="well">
+      <h3>My <%= stack_word_tree.name %></h3>
+      <div class="tree-<%= stack_word_tree.id %>"></div>
+      <%= link_to 'View Tree Details', stack_word_tree_path(stack_word_tree), class: "btn btn-default" %>
+      <%= link_to 'Remove Tree', stack_word_tree, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+    </div>
 
-  <tbody>
-    <% @stack_word_trees.each do |stack_word_tree| %>
-      <tr>
-        <td><%= stack_word_tree.name %></td>
-        <td>
-          <%= link_to 'Show', stack_word_tree_path(stack_word_tree), class: "btn btn-default" %>
-          <%= link_to 'Remove Tree', stack_word_tree, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+    <script>
+      var treeData = <%= tree.to_json.html_safe %>;
+      adgear.ui.stackWordTree.drawStackWordTree(".tree-<%= stack_word_tree.id.to_s %>", treeData);
+    </script>
+<% end %>
+
+
 
