@@ -11,7 +11,10 @@ Engineering Tasks:
 - create a README
 
 TODO
-
+* create dictionary class
+* create UI to upload a word file
+* display the results
+- store the results?
 
 ISSUES:
 
