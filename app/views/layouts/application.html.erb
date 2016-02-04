@@ -9,6 +9,13 @@
   <body>
     <%= render "shared/nav" %>
 
+    <% flash.each do |type, message| %>
+        <div class="alert <%= bootstrap_class_for(type) %> fade in">
+          <button class="close" data-dismiss="alert">×</button>
+          <%= message %>
+        </div>
+    <% end %>
+
     <div class="jumbotron">
       <div class="container">
         <h1>Awesome Stacked WordTree!</h1>

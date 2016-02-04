@@ -20,7 +20,7 @@ class StackWordTreesController < ApplicationController
 
     respond_to do |format|
       if @stack_word_tree.save
-        format.html { redirect_to @stack_word_tree, notice: "Stack word tree was successfully created." }
+        format.html { redirect_to edit_stack_word_tree_path(@stack_word_tree), notice: "Stack word tree was successfully created." }
       else
         format.html { render :new }
       end
@@ -30,7 +30,7 @@ class StackWordTreesController < ApplicationController
   def update
     respond_to do |format|
       if @stack_word_tree.update(stack_word_tree_params)
-        format.html { redirect_to @stack_word_tree, notice: "Stack word tree was successfully updated." }
+        format.html { redirect_to edit_stack_word_tree_path(@stack_word_tree), notice: "Stack word tree was successfully updated." }
       else
         format.html { render :edit }
       end
