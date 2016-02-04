@@ -9,21 +9,8 @@
   </head>
   <body>
     <%= render "shared/nav" %>
-
-    <% flash.each do |type, message| %>
-        <div class="alert <%= bootstrap_class_for(type) %> fade in">
-          <button class="close" data-dismiss="alert">×</button>
-          <%= message %>
-        </div>
-    <% end %>
-
-    <div class="jumbotron">
-      <div class="container">
-        <h1>Awesome Stacked WordTree!</h1>
-        <p>Go ahead, upload a file and let our super AI figure out what the
-          longest word containing a stacked tree is in your file.</p>
-      </div>
-    </div>
+    <%= render 'shared/flash_message' %>
+    <%= render 'shared/header' %>
 
     <div class="container">
       <div class="row">

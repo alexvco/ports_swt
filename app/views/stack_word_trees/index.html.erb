@@ -1,12 +1,10 @@
-<h1>Listing Stack Word Trees</h1>
+<% if @stack_word_trees.any? %>
+    <h1>Stack Word Trees</h1>
+<% else %>
+    <h1>No Stack Word Trees Available</h1>
+<% end %>
 
 <% @stack_word_trees.each do |stack_word_tree| %>
-    <%
-      tree = { name: "flare", children: [] }
-      stack_word_tree.result.each do |result|
-        tree[:children] << { name: result, size: result.length }
-      end
-    %>
     <div class="well">
       <h3>My <%= stack_word_tree.name %></h3>
       <div class="tree-<%= stack_word_tree.id %>"></div>
@@ -15,7 +13,7 @@
     </div>
 
     <script>
-      var treeData = <%= tree.to_json.html_safe %>;
+      var treeData = <%= create_json_tree(stack_word_tree).to_json.html_safe %>;
       adgear.ui.stackWordTree.drawStackWordTree(".tree-<%= stack_word_tree.id.to_s %>", treeData);
     </script>
 <% end %>

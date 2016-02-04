@@ -20,13 +20,7 @@
 </div>
 
 <script>
-  <%
-     tree = { name: "flare", children: [] }
-     @stack_word_tree.result.each do |result|
-        tree[:children] << { name: result, size: result.length }
-     end
-   %>
-    var treeData = <%= tree.to_json.html_safe %>;
+  var treeData = <%= create_json_tree(@stack_word_tree).to_json.html_safe %>;
   adgear.ui.stackWordTree.drawStackWordTree(".tree-<%= @stack_word_tree.id.to_s %>", treeData);
 </script>
 <%= link_to("View All Trees", stack_word_trees_path, class: "btn btn-default") %>

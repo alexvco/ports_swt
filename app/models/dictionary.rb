@@ -33,7 +33,7 @@ class Dictionary
     trees.values.reverse.find { |tree| has_full_stack_tree?(tree) }
   end
 
-  def find_possible_permuted_trees(word: word, possible_stacks: {}, previous_stack_key: nil)
+  def find_possible_permuted_trees(word: , possible_stacks: {}, previous_stack_key: nil)
     if possible_stacks.empty?
       previous_stack_key      = [word]
       possible_stacks[[word]] = [word]

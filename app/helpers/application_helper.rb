@@ -13,4 +13,12 @@ module ApplicationHelper
         "alert-info"
     end
   end
+
+  def create_json_tree(stack_word_tree)
+    tree = { name: "flare", children: [] }
+    stack_word_tree.result.each do |result|
+      tree[:children] << { name: result, size: result.length }
+    end
+    tree
+  end
 end
