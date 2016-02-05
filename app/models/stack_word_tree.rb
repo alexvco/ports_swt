@@ -22,6 +22,6 @@ class StackWordTree < ActiveRecord::Base
   end
 
   def ensure_data_file_exists!
-    raise NoDataFiledError, "No data file provided" if data_file.blank?
+    fail NoDataFiledError, "No data file provided" if data_file.blank?
   end
 end

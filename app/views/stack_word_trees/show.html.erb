@@ -1,7 +1,11 @@
 <div class="row">
   <div class="col-md-12">
-    <h3>Your stack tree is called <%= @stack_word_tree.name %>, take good care of it!</h3>
-    <h4>Here is the stacked word tree of the longest word:</h4>
+    <% if @stack_word_tree.result.blank? %>
+        <h3>Sorry, it looks like this file doesn't have any stacked word trees!</h3>
+    <% else %>
+        <h3>Your stack tree is called <%= @stack_word_tree.name %>, take good care of it!</h3>
+        <h4>Here is the stacked word tree of the longest word:</h4>
+    <% end %>
     <hr>
   </div>
 </div>
@@ -10,8 +14,9 @@
   <div class="col-md-9">
     <div class="tree-<%= @stack_word_tree.id %>"></div>
   </div>
+
   <div class="col-md-3">
-    <% if @stack_word_tree.result %>
+    <% unless @stack_word_tree.blank? %>
         <% @stack_word_tree.result.each do |result| %>
             <p><%= result %></p>
         <% end %>
