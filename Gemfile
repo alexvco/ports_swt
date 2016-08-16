@@ -29,8 +29,8 @@ end
 
 group :test do
   gem "launchy"
-  gem "capybara"
-  gem "capybara-webkit"
+  # gem "capybara"
+  # gem "capybara-webkit"
   gem "database_cleaner"
   gem "shoulda-matchers", require: false
   gem "simplecov", "~> 0.9", require: false
